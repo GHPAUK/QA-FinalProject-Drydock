@@ -29,7 +29,7 @@ The Application must include the minimum CRUD functionality (Create, Read, Updat
 ---
 ### Important Links
 ---
-Jira Board:                         |https://ghqa.atlassian.net/jira/software/projects/QFD/boards/1/roadmap
+Jira Board:       |https://ghqa.atlassian.net/jira/software/projects/QFD/boards/1/roadmap
 
 MoSCoW Prioritisation Board:        |https://trello.com/b/GwIQmA7i/qa-finalproject-drydock-moscow
 
