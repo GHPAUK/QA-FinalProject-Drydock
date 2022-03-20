@@ -12,8 +12,11 @@ To create a Spring Boot API, with utilisation of supporting tools, methodologies
 Specifically, you are required to create a Spring Boot API using:
 
     An application back-end developed using the language from your Programming Fundamentals module (e.g. Java)
+    
     A managed database hosted locally or within the Cloud Provider examined during your Cloud Fundamentals module (e.g. H2 or MySQL (local / GCP)
+    
     A means of making API calls (Postman) and a means of checking persistence (Workbench/H2 console)
+    
 ---
 
 ### Scenario
