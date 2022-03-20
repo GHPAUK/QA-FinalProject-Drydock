@@ -1,6 +1,6 @@
 # QA-FinalProject-Drydock
 
-###### This repo houses my final project source code and deliverable for the QA Bootcamp I have attended
+#### This repo houses my final project source code and deliverable for the QA Bootcamp I have attended
 ---
 
 #### Overview
