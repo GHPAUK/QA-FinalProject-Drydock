@@ -26,3 +26,17 @@ In this projects scenario I imagine I have been tasked as an employee of a Drydo
 The Application must include the minimum CRUD functionality (Create, Read, Update and Delete) and handle HTTP requests to perform basic tasks such as create an order and commit said order to a database for data persistence. 
 
 
+### Important Links
+---
+Jira Board:
+https://ghqa.atlassian.net/jira/software/projects/QFD/boards/1/roadmap
+
+MoSCoW Prioritisation Board:
+https://trello.com/b/GwIQmA7i/qa-finalproject-drydock-moscow
+
+Developer Diary:
+https://ghqa.atlassian.net/wiki/spaces/QFD/pages/33170/Dry+Dock+Dev+Diary
+
+Drydock Project Risk Assessment:
+https://ghqa.atlassian.net/wiki/spaces/QFD/pages/196613/Dry+Dock+Risk+Assessment
+---
