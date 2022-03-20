@@ -25,8 +25,8 @@ In this projects scenario I imagine I have been tasked as an employee of a Drydo
 
 The Application must include the minimum CRUD functionality (Create, Read, Update and Delete) and handle HTTP requests to perform basic tasks such as create an order and commit said order to a database for data persistence. 
 
-</hr>
 
+---
 ### Important Links
 ---
 Jira Board:
