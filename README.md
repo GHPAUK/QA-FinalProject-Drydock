@@ -29,15 +29,15 @@ The Application must include the minimum CRUD functionality (Create, Read, Updat
 ---
 ### Important Links
 ---
-<span style="text-decoration: underline">Jira Board:</span> 
+Jira Board:
 * https://ghqa.atlassian.net/jira/software/projects/QFD/boards/1/roadmap
 
-<span style="text-decoration: underline">MoSCoW Prioritisation Board:</span> 
+MoSCoW Prioritisation Board:
 * https://trello.com/b/GwIQmA7i/qa-finalproject-drydock-moscow
 
-<span style="text-decoration: underline">Developer Diary:</span> 
+Developer Diary:
 * https://ghqa.atlassian.net/wiki/spaces/QFD/pages/33170/Dry+Dock+Dev+Diary
 
-<span style="text-decoration: underline">Drydock Project Risk Assessment:</span> 
+Drydock Project Risk Assessment:
 * https://ghqa.atlassian.net/wiki/spaces/QFD/pages/196613/Dry+Dock+Risk+Assessment
 
