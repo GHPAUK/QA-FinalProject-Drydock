@@ -1,5 +1,8 @@
 package com.qa.ordermngt.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +11,7 @@ import com.qa.ordermngt.model.Order;
 import com.qa.ordermngt.repository.OrderRepository;
 import com.qa.ordermngt.utils.IdNotFoundException;
 import com.qa.ordermngt.utils.OrderNotCreatedException;
+import com.qa.ordermngt.utils.OrdersNotFoundException;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -53,6 +57,27 @@ public class OrderServiceImpl implements OrderService {
 			return order;
 		} catch (Exception e) {
 			throw new IdNotFoundException("Cannot find the specified Id");
+		}
+	}
+
+	@Override
+	public List<Order> getAllOrders() throws OrdersNotFoundException {
+		try {
+			List<OrderEntity> orderEntities = repo.findAll();
+
+			List<Order> orders = orderEntities.stream()
+					.map(orderEntity -> new Order(orderEntity.getId(), orderEntity.getCustomer(),
+							orderEntity.getVehicleType(), orderEntity.getDisplacement(), orderEntity.isMilitary(),
+							orderEntity.isWeaponised(), orderEntity.getResourcesRequired(), orderEntity.getCost()))
+					.collect(Collectors.toList());
+			
+			for (int i = 0; i < orders.size(); i++) {		
+				orders.get(i).calcCost();
+			}
+			
+			return orders;
+		} catch (Exception e) {
+			throw new OrdersNotFoundException("No orders found in database");
 		}
 	}
 

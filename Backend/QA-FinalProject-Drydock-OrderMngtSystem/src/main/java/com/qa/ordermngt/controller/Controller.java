@@ -1,11 +1,13 @@
 package com.qa.ordermngt.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +17,7 @@ import com.qa.ordermngt.model.Order;
 import com.qa.ordermngt.service.OrderService;
 import com.qa.ordermngt.utils.IdNotFoundException;
 import com.qa.ordermngt.utils.OrderNotCreatedException;
+import com.qa.ordermngt.utils.OrdersNotFoundException;
 
 @RestController
 public class Controller {
@@ -51,6 +54,13 @@ public class Controller {
 			throws IdNotFoundException {
 		order = service.updateOrder(id, order);
 		return ResponseEntity.ok(order);
+	}
+
+	@GetMapping("/getOrders")
+	public ResponseEntity<List<Order>> getAllOrders() throws OrdersNotFoundException {
+		List<Order> orders = null;
+		orders = service.getAllOrders();
+		return ResponseEntity.ok(orders);
 	}
 
 }

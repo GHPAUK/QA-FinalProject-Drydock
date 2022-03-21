@@ -26,5 +26,21 @@ public class Order {
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
 	}
+	
+	public Order(Long id, String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
+			int resourcesRequired, float cost) {
+		super();
+		this.id = id;
+		this.customer = customer;
+		this.vehicleType = vehicleType;
+		this.displacement = displacement;
+		this.military = military;
+		this.weaponised = weaponised;
+		this.resourcesRequired = resourcesRequired;
+	}
+	
+	public void calcCost() {
+		setCost(Math.round((this.getDisplacement() * this.getResourcesRequired()) / 1.5f));
+	}
 
 }
