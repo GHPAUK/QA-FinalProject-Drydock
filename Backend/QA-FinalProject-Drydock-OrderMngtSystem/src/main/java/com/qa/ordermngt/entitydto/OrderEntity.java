@@ -42,7 +42,6 @@ public class OrderEntity {
 		this.military = military;
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
-		this.cost = Math.round((displacement * resourcesRequired / 1.5f));
 	}
 
 }

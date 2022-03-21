@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@SuppressWarnings("unused")
 public class Order {
 
 	private long id;
@@ -26,7 +25,6 @@ public class Order {
 		this.military = military;
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
-		this.cost = Math.round((displacement * resourcesRequired / 1.5f));
 	}
 
 }
