@@ -62,5 +62,13 @@ public class Controller {
 		orders = service.getAllOrders();
 		return ResponseEntity.ok(orders);
 	}
+	
+	@GetMapping("/getOrder/{id}")
+	public ResponseEntity<Order> getOrder(@PathVariable("id") Long id) throws IdNotFoundException {
+		Order order = null;
+		order = service.getOrderById(id);
+		
+		return ResponseEntity.ok(order);
+	}
 
 }

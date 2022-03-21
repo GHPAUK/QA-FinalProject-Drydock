@@ -70,14 +70,26 @@ public class OrderServiceImpl implements OrderService {
 							orderEntity.getVehicleType(), orderEntity.getDisplacement(), orderEntity.isMilitary(),
 							orderEntity.isWeaponised(), orderEntity.getResourcesRequired(), orderEntity.getCost()))
 					.collect(Collectors.toList());
-			
-			for (int i = 0; i < orders.size(); i++) {		
+
+			for (int i = 0; i < orders.size(); i++) {
 				orders.get(i).calcCost();
 			}
-			
+
 			return orders;
 		} catch (Exception e) {
 			throw new OrdersNotFoundException("No orders found in database");
+		}
+	}
+
+	@Override
+	public Order getOrderById(Long id) throws IdNotFoundException {
+		try {
+			OrderEntity orderEntity = repo.findById(id).get();
+			Order order = new Order();
+			BeanUtils.copyProperties(orderEntity, order);
+			return order;
+		} catch (Exception e) {
+			throw new IdNotFoundException("Cannot find the specified Id");
 		}
 	}
 

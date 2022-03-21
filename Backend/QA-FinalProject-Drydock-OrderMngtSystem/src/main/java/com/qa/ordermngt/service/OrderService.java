@@ -17,5 +17,7 @@ public interface OrderService {
 
 	List<Order> getAllOrders() throws OrdersNotFoundException;
 
+	Order getOrderById(Long id) throws IdNotFoundException;
+
 	
 }
