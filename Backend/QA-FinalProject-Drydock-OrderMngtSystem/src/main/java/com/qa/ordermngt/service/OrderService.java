@@ -10,4 +10,7 @@ public interface OrderService {
 
 	boolean deleteOrder(Long id) throws IdNotFoundException;
 
+	Order updateOrder(Long id, Order order) throws IdNotFoundException;
+
+	
 }

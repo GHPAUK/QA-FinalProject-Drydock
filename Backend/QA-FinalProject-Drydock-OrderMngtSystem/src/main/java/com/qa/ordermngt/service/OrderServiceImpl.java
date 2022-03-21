@@ -24,7 +24,7 @@ public class OrderServiceImpl implements OrderService {
 		try {
 			OrderEntity orderDto = new OrderEntity();
 			BeanUtils.copyProperties(order, orderDto);
-			orderDto.setCost((orderDto.getDisplacement() * orderDto.getResourcesRequired()) / 1.5f);
+			orderDto.setCost(Math.round((orderDto.getDisplacement() * orderDto.getResourcesRequired()) / 1.5f));
 			repo.save(orderDto);
 			return true;
 		} catch (Exception e) {
@@ -38,11 +38,22 @@ public class OrderServiceImpl implements OrderService {
 			OrderEntity entityDto = repo.findById(id).get();
 			repo.delete(entityDto);
 			return true;
-		} catch(Exception e) {
+		} catch (Exception e) {
 			throw new IdNotFoundException("Cannot find the specified Id");
 		}
 	}
-	
-	
+
+	@Override
+	public Order updateOrder(Long id, Order order) throws IdNotFoundException {
+		try {
+			OrderEntity orderDto = repo.findById(id).get();
+			BeanUtils.copyProperties(order, orderDto, "id");
+			orderDto.setCost(Math.round((orderDto.getDisplacement() * orderDto.getResourcesRequired()) / 1.5f));
+			repo.save(orderDto);
+			return order;
+		} catch (Exception e) {
+			throw new IdNotFoundException("Cannot find the specified Id");
+		}
+	}
 
 }
