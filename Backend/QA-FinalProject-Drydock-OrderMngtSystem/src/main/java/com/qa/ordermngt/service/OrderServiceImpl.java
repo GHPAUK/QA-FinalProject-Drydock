@@ -29,6 +29,7 @@ public class OrderServiceImpl implements OrderService {
 			OrderEntity orderDto = new OrderEntity();
 			BeanUtils.copyProperties(order, orderDto);
 			orderDto.setCost(Math.round((orderDto.getDisplacement() * orderDto.getResourcesRequired()) / 1.5f));
+			orderDto.setDate();
 			repo.save(orderDto);
 			return true;
 		} catch (Exception e) {
@@ -68,7 +69,8 @@ public class OrderServiceImpl implements OrderService {
 			List<Order> orders = orderEntities.stream()
 					.map(orderEntity -> new Order(orderEntity.getId(), orderEntity.getCustomer(),
 							orderEntity.getVehicleType(), orderEntity.getDisplacement(), orderEntity.isMilitary(),
-							orderEntity.isWeaponised(), orderEntity.getResourcesRequired(), orderEntity.getCost()))
+							orderEntity.isWeaponised(), orderEntity.getResourcesRequired(), orderEntity.getCost(),
+							orderEntity.getCalendarDate()))
 					.collect(Collectors.toList());
 
 			for (int i = 0; i < orders.size(); i++) {

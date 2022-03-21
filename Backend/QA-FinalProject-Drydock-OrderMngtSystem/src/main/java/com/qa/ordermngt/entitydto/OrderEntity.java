@@ -1,10 +1,14 @@
 package com.qa.ordermngt.entitydto;
 
+import java.util.Calendar;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +36,9 @@ public class OrderEntity {
 	private int resourcesRequired;
 	@Column(nullable = false)
 	private float cost;
+	@Column(nullable = false)
+	@Temporal(TemporalType.DATE)
+	private java.util.Date calendarDate;
 
 	public OrderEntity(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
 			int resourcesRequired, float cost) {
@@ -42,6 +49,10 @@ public class OrderEntity {
 		this.military = military;
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
+	}
+
+	public void setDate() {
+		this.calendarDate = Calendar.getInstance().getTime();
 	}
 
 }
