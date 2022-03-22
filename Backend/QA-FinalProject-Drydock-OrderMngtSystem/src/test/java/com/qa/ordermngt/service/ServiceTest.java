@@ -125,4 +125,28 @@ public class ServiceTest {
 		Assertions.assertEquals("Cannot find the specified Id", exception.getMessage());
 	}
 	
+	@Test
+	public void getAllOrdersTest() throws OrdersNotFoundException {
+		// Act
+		Mockito.when(repo.findAll()).thenReturn(ordersListEnt);
+		// Expected
+		String result = service.getAllOrders().toString();
+		String resultString = "[Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, calendarDate=null), Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, calendarDate=null)]";
+		// Assert
+		Assertions.assertEquals(resultString, result);
+		// Verification
+		Mockito.verify(repo, Mockito.times(1)).findAll();
+	}
+
+	@Test
+	public void getAllOrdersCatchTest() {
+		Throwable exception = Assertions.assertThrows(OrdersNotFoundException.class, () -> {
+			Mockito.doThrow(OrdersNotFoundException.class).when(service.getAllOrders());
+
+		});
+
+		// Assert
+		Assertions.assertEquals("No orders found in database", exception.getMessage());
+	}
+	
 }
