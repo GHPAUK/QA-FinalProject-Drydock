@@ -1,6 +1,7 @@
 package com.qa.ordermngt.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -38,7 +39,7 @@ public class ControllerTest {
 
 	// Test Objects
 	Order testOrder = new Order("TestCustomer", "TestVehicle", 1000, true, true, 500);
-	Order testOrderId = new Order(1l, "TestCustomer", "TestVehicle", 1000, true, true, 500, 5000, null);
+	Order testOrderId = new Order(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 5000, null);
 
 	@Test
 	public void testCreateOrder() throws Exception {
@@ -71,10 +72,33 @@ public class ControllerTest {
 		String listingJson = mapper.writeValueAsString(testOrderId);
 		RequestBuilder req = put("/update/1").contentType(MediaType.APPLICATION_JSON).content(listingJson);
 		ResultMatcher checkStatus = status().isOk();
-		ResultMatcher checkBody = content().string("{\"id\":1,\"customer\":\"TestCustomer\",\"vehicleType\":\"TestVehicle\",\"displacement\":1000,\"military\":true,\"weaponised\":true,\"resourcesRequired\":500,\"cost\":0.0,\"date\":null}");
+		ResultMatcher checkBody = content().string("{\"id\":1,\"customer\":\"TEST_CUSTOMER1\",\"vehicleType\":\"TEST_VEHICLE1\",\"displacement\":100,\"military\":true,\"weaponised\":true,\"resourcesRequired\":50,\"cost\":0.0,\"date\":null}");
 		
 		// Act
 		mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
+	@Test
+	public void testGetAllOrders() throws Exception {
+		// Arrange
+		RequestBuilder req = get("/getOrders");
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().string(
+				"[{\"id\":1,\"customer\":\"TEST_CUSTOMER1\",\"vehicleType\":\"TEST_VEHICLE1\",\"displacement\":100,\"military\":true,\"weaponised\":true,\"resourcesRequired\":50,\"cost\":3333.0,\"date\":null},{\"id\":2,\"customer\":\"TEST_CUSTOMER2\",\"vehicleType\":\"TEST_VEHICLE2\",\"displacement\":100,\"military\":true,\"weaponised\":true,\"resourcesRequired\":50,\"cost\":3333.0,\"date\":null}]");
+
+		// Act
+		mvc.perform(req).andExpect(checkStatus).andExpectAll(checkBody);
+	}
+	
+	@Test
+	public void testGetOrderById() throws Exception {
+		// Arrange
+		RequestBuilder req = get("/getOrder/1");
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().string("{\"id\":1,\"customer\":\"TEST_CUSTOMER1\",\"vehicleType\":\"TEST_VEHICLE1\",\"displacement\":100,\"military\":true,\"weaponised\":true,\"resourcesRequired\":50,\"cost\":0.0,\"date\":null}");
+		
+		// Act
+		mvc.perform(req).andExpect(checkStatus).andExpectAll(checkBody);
 	}
 	
 }
