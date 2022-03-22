@@ -65,4 +65,16 @@ public class ControllerTest {
 		mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
 	}
 	
+	@Test
+	public void testUpdate() throws Exception {
+		// Arrange
+		String listingJson = mapper.writeValueAsString(testOrderId);
+		RequestBuilder req = put("/update/1").contentType(MediaType.APPLICATION_JSON).content(listingJson);
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().string("{\"id\":1,\"customer\":\"TestCustomer\",\"vehicleType\":\"TestVehicle\",\"displacement\":1000,\"military\":true,\"weaponised\":true,\"resourcesRequired\":500,\"cost\":0.0,\"date\":null}");
+		
+		// Act
+		mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
 }
