@@ -1,6 +1,7 @@
 package com.qa.ordermngt.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,7 +22,7 @@ public class Order {
 	private int resourcesRequired;
 	private float cost;
 	@Temporal(TemporalType.DATE)
-	private java.util.Date calendarDate;
+	private Date calendarDate;
 
 	public Order(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
 			int resourcesRequired, float cost, Date date) {
