@@ -33,7 +33,6 @@ public class OrderServiceImpl implements OrderService {
 			repo.save(orderDto);
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new OrderNotCreatedException("The order cannot be created, check the request body");
 		}
 	}
@@ -45,6 +44,7 @@ public class OrderServiceImpl implements OrderService {
 			repo.delete(entityDto);
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new IdNotFoundException("Cannot find the specified Id");
 		}
 	}
@@ -58,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
 			repo.save(orderDto);
 			return order;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new IdNotFoundException("Cannot find the specified Id");
 		}
 	}

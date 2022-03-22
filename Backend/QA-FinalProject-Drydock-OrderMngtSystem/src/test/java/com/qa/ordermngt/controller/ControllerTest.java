@@ -1,6 +1,8 @@
 package com.qa.ordermngt.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,17 +38,31 @@ public class ControllerTest {
 
 	// Test Objects
 	Order testOrder = new Order("TestCustomer", "TestVehicle", 1000, true, true, 500);
+	Order testOrderId = new Order(1l, "TestCustomer", "TestVehicle", 1000, true, true, 500, 5000, null);
 
 	@Test
 	public void testCreateOrder() throws Exception {
+		// Arrange
 		String listingJson = mapper.writeValueAsString(testOrder);
-
 		RequestBuilder req = post("/order").contentType(MediaType.APPLICATION_JSON).content(listingJson);
-
 		ResultMatcher checkStatus = status().isOk();
 		ResultMatcher checkBody = content().string("{\"Created\":true}");
 
+		// Act
 		mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
 	}
 
+	@Test
+	public void testDeleteOrder() throws Exception {
+		// Arrange
+		Order orderToDelete = testOrder;
+		orderToDelete.setId(1l);
+		RequestBuilder req = delete("/delete/1");
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().string("{\"Order Deleted\":true}");
+		
+		// Act
+		mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
 }

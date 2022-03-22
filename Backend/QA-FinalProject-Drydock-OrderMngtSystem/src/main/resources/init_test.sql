@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS `order_entity`;
+DROP TABLE IF EXISTS `ORDER_ENTITY`;
 
-CREATE TABLE order_entity(
+CREATE TABLE ORDER_ENTITY(
 id long AUTO_INCREMENT,
 customer VARCHAR(80) NOT NULL,
 vehicle_type VARCHAR(80) NOT NULL,
@@ -13,5 +13,5 @@ date date,
 PRIMARY KEY (id)
 );
 
-INSERT INTO `order_entity` (`customer`, `vehicle_type`, `displacement`, `military`, `weaponised`, `resources_required`, `cost`) VALUES ('TEST_CUSTOMER1', 'TEST_VEHICLE1', 100, true, true, 50, 0);
-INSERT INTO `order_entity` (`customer`, `vehicle_type`, `displacement`, `military`, `weaponised`, `resources_required`, `cost`) VALUES ('TEST_CUSTOMER2', 'TEST_VEHICLE2', 100, true, true, 50, 0);
+INSERT INTO `ORDER_ENTITY` (`customer`, `vehicle_type`, `displacement`, `military`, `weaponised`, `resources_required`, `cost`, `date`) VALUES ('TEST_CUSTOMER1', 'TEST_VEHICLE1', 100, true, true, 50, 0, null);
+INSERT INTO `ORDER_ENTITY` (`customer`, `vehicle_type`, `displacement`, `military`, `weaponised`, `resources_required`, `cost`, `date`) VALUES ('TEST_CUSTOMER2', 'TEST_VEHICLE2', 100, true, true, 50, 0, null);

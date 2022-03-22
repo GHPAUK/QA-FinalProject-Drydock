@@ -38,7 +38,7 @@ public class OrderEntity {
 	private int resourcesRequired;
 	@Column(nullable = false)
 	private float cost;
-	@Column(nullable = false)
+	@Column(nullable = true)
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	

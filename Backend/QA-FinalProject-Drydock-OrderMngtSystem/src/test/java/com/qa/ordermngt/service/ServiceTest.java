@@ -130,7 +130,7 @@ public class ServiceTest {
 		Mockito.when(repo.findAll()).thenReturn(ordersListEnt);
 		// Expected
 		String result = service.getAllOrders().toString();
-		String resultString = "[Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, calendarDate=null), Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, calendarDate=null)]";
+		String resultString = "[Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, date=null), Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, date=null)]";
 		// Assert
 		Assertions.assertEquals(resultString, result);
 		// Verification
@@ -154,7 +154,7 @@ public class ServiceTest {
 		Mockito.when(repo.findById(1l)).thenReturn(Optional.of(orderEnt1));
 		// Expected
 		String result = service.getOrderById(1l).toString();
-		String resultString = "Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, calendarDate=null)";
+		String resultString = "Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, date=null)";
 		// Assert
 		Assertions.assertEquals(resultString, result);
 		// Verification
