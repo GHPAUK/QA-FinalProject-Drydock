@@ -78,7 +78,7 @@ public class ServiceTest {
 		Assertions.assertEquals("The order cannot be created, check the request body", exception.getMessage());	
 	}
 
-	// The h2 console never has any entries and have been unable to find a way to resolve this issue
+	// The h2 console never has any entries and I have been unable to find a way to resolve this issue
 	// EDIT: I am now suspicious this quirk is due to the @MockBean annotation!
 	
 //	@Test
@@ -149,4 +149,27 @@ public class ServiceTest {
 		Assertions.assertEquals("No orders found in database", exception.getMessage());
 	}
 	
+	@Test
+	public void getOrderByIdTest() throws IdNotFoundException {
+		// Act
+		Mockito.when(repo.findById(1l)).thenReturn(Optional.of(orderEnt1));
+		// Expected
+		String result = service.getOrderById(1l).toString();
+		String resultString = "Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, calendarDate=null)";
+		// Assert
+		Assertions.assertEquals(resultString, result);
+		// Verification
+		Mockito.verify(repo, Mockito.times(1)).findById(1l);
+	}
+
+	@Test
+	public void getOrderByIdCatchTest() {
+		Throwable exception = Assertions.assertThrows(IdNotFoundException.class, () -> {
+			Mockito.doThrow(IdNotFoundException.class).when(service.getOrderById(1l));
+
+		});
+
+		// Assert
+		Assertions.assertEquals("Cannot find the specified Id", exception.getMessage());
+	}
 }
