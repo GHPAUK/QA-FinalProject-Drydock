@@ -40,10 +40,10 @@ public class OrderEntity {
 	private float cost;
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
-	private Date calendarDate;
-
+	private Date date;
+	
 	public OrderEntity(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
-			int resourcesRequired, float cost) {
+			int resourcesRequired) {
 		super();
 		this.customer = customer;
 		this.vehicleType = vehicleType;
@@ -62,11 +62,11 @@ public class OrderEntity {
 		this.military = military;
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
-		this.calendarDate = date;
+		this.date = date;
 	}
 	
 	public OrderEntity(long id, String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
-			int resourcesRequired, float cost) {
+			int resourcesRequired, float cost, Date date) {
 		super();
 		this.id = id;
 		this.customer = customer;
@@ -75,10 +75,14 @@ public class OrderEntity {
 		this.military = military;
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
+		this.date = date;
 	}
 
 	public void setDate() {
-		this.calendarDate = Calendar.getInstance().getTime();
+		this.date = Calendar.getInstance().getTime();
 	}
 	
+	public void setCost() {
+		this.cost = Math.round((this.getDisplacement() * this.getResourcesRequired()) / 1.5f);
+	}
 }

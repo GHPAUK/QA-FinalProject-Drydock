@@ -37,20 +37,18 @@ public class ServiceTest {
 
 	// Test Objects
 	// Entities
-	OrderEntity orderEnt1 = new OrderEntity(1l, "TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333);
-	OrderEntity orderEnt2 = new OrderEntity("TestCustomer2", "TestVehicle2", 100, true, true, 50, 3333);
+	OrderEntity orderEnt1 = new OrderEntity(1l, "TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333, null);
+	OrderEntity orderEnt2 = new OrderEntity("TestCustomer2", "TestVehicle2", 100, true, true, 50, 3333, null);
 	
 	// Entity List
 	List<OrderEntity> ordersListEnt = List.of(orderEnt1, orderEnt1);
 	
 	// Models
-	Order order1 = new Order("TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333,
-			Calendar.getInstance().getTime());
+	Order order1 = new Order("TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333, null);
 	Order orderId1 = new Order(1l, "TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333,
 			Calendar.getInstance().getTime());
 	Order orderId2 = new Order(1l, "TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333, null);
-	Order order2 = new Order("TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333,
-			Calendar.getInstance().getTime());
+	Order order2 = new Order("TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333, Calendar.getInstance().getTime());
 
 	// Model List
 	List<Order> ordersList = List.of(orderId2, orderId2);

@@ -1,5 +1,6 @@
 package com.qa.ordermngt.model;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -21,9 +22,20 @@ public class Order {
 	private boolean weaponised;
 	private int resourcesRequired;
 	private float cost;
-	@Temporal(TemporalType.DATE)
-	private Date calendarDate;
+	private Date date;
 
+	public Order(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
+			int resourcesRequired) {
+		super();
+		this.customer = customer;
+		this.vehicleType = vehicleType;
+		this.displacement = displacement;
+		this.military = military;
+		this.weaponised = weaponised;
+		this.resourcesRequired = resourcesRequired;
+		setDate();
+	}
+	
 	public Order(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
 			int resourcesRequired, float cost, Date date) {
 		super();
@@ -33,6 +45,7 @@ public class Order {
 		this.military = military;
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
+		this.date = date;
 	}
 
 	public Order(long id, String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
@@ -49,6 +62,10 @@ public class Order {
 
 	public void calcCost() {
 		setCost(Math.round((this.getDisplacement() * this.getResourcesRequired()) / 1.5f));
+	}
+
+	public void setDate() {
+		this.date = Calendar.getInstance().getTime();
 	}
 
 }

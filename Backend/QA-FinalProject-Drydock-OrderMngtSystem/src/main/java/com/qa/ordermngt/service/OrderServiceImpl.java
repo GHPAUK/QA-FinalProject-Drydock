@@ -28,11 +28,12 @@ public class OrderServiceImpl implements OrderService {
 		try {
 			OrderEntity orderDto = new OrderEntity();
 			BeanUtils.copyProperties(order, orderDto);
-			orderDto.setCost(Math.round((orderDto.getDisplacement() * orderDto.getResourcesRequired()) / 1.5f));
+			orderDto.setCost();
 			orderDto.setDate();
 			repo.save(orderDto);
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new OrderNotCreatedException("The order cannot be created, check the request body");
 		}
 	}
@@ -70,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
 					.map(orderEntity -> new Order(orderEntity.getId(), orderEntity.getCustomer(),
 							orderEntity.getVehicleType(), orderEntity.getDisplacement(), orderEntity.isMilitary(),
 							orderEntity.isWeaponised(), orderEntity.getResourcesRequired(), orderEntity.getCost(),
-							orderEntity.getCalendarDate()))
+							orderEntity.getDate()))
 					.collect(Collectors.toList());
 
 			for (int i = 0; i < orders.size(); i++) {

@@ -13,5 +13,5 @@ date date,
 PRIMARY KEY (id)
 );
 
-INSERT INTO `order_entity` (`customer`, `vehicle_type`, `displacement`, `military`, `weaponised`, `resources_required`, `cost`, `date`) VALUES ('TEST_CUSTOMER1', 'TEST_VEHICLE1', 100, true, true, 50, 3333, null);
-INSERT INTO `order_entity` (`customer`, `vehicle_type`, `displacement`, `military`, `weaponised`, `resources_required`, `cost`, `date`) VALUES ('TEST_CUSTOMER2', 'TEST_VEHICLE2', 100, true, true, 50, 3333, null);
+INSERT INTO `order_entity` (`customer`, `vehicle_type`, `displacement`, `military`, `weaponised`, `resources_required`, `cost`) VALUES ('TEST_CUSTOMER1', 'TEST_VEHICLE1', 100, true, true, 50, 0);
+INSERT INTO `order_entity` (`customer`, `vehicle_type`, `displacement`, `military`, `weaponised`, `resources_required`, `cost`) VALUES ('TEST_CUSTOMER2', 'TEST_VEHICLE2', 100, true, true, 50, 0);
