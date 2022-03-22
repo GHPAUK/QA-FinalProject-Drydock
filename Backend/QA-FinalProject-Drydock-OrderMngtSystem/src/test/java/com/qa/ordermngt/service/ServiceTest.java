@@ -16,7 +16,9 @@ import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import com.qa.ordermngt.entitydto.OrderEntity;
 import com.qa.ordermngt.model.Order;
 import com.qa.ordermngt.repository.OrderRepository;
+import com.qa.ordermngt.utils.IdNotFoundException;
 import com.qa.ordermngt.utils.OrderNotCreatedException;
+import com.qa.ordermngt.utils.OrdersNotFoundException;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
@@ -64,19 +66,30 @@ public class ServiceTest {
 	}
 
 	// The h2 console never has any entries and have been unable to find a way to resolve this issue
+	// EDIT: I am now suspicious this quirk is due to the @MockBean annotation!
 	
-//	@Test
-//	public void deleteOrderTest() throws IdNotFoundException, OrderNotCreatedException, OrdersNotFoundException {
-//		// Act
-//		repo.save(orderEnt1);
-//		service.createOrder(order1);
-//		System.out.println(service.getAllOrders());
-//		// Arrange
-//		boolean result = service.deleteOrder(1l);
-//		// Assert
-//		Assertions.assertTrue(result);
-//		// Verify
-//	}
+	@Test
+	public void deleteOrderTest() throws IdNotFoundException, OrderNotCreatedException, OrdersNotFoundException {
+		// Act
+		repo.save(orderEnt1);
+		service.createOrder(order1);
+		System.out.println(service.getAllOrders());
+		// Arrange
+		boolean result = service.deleteOrder(1l);
+		// Assert
+		Assertions.assertTrue(result);
+		// Verify
+	}
+	
+	@Test
+	public void deleteOrderCatchTest() throws IdNotFoundException {
+		// Act
+		Throwable exception = Assertions.assertThrows(IdNotFoundException.class, () -> {
+			Mockito.doThrow(IdNotFoundException.class).when(service.deleteOrder(1l));
+		});
+		// Assert
+		Assertions.assertEquals("Cannot find the specified Id", exception.getMessage());
+	}
 	
 	
 	
