@@ -1,31 +1,29 @@
 package com.qa.ordermngt.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BooleanSupplier;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 
-import com.qa.ordermngt.entitydto.OrderEntity;
+import com.qa.ordermngt.entity.OrderEntity;
 import com.qa.ordermngt.model.Order;
 import com.qa.ordermngt.repository.OrderRepository;
 import com.qa.ordermngt.utils.IdNotFoundException;
 import com.qa.ordermngt.utils.OrderNotCreatedException;
 import com.qa.ordermngt.utils.OrdersNotFoundException;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest
-@Sql(scripts = { "classpath:init_test.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 @ActiveProfiles("dev")
 public class ServiceTest {
 
@@ -35,64 +33,55 @@ public class ServiceTest {
 	@Autowired
 	private OrderService service;
 
-	// Test Objects
-	// Entities
-	OrderEntity orderEnt1 = new OrderEntity(1l, "TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333, null);
-	OrderEntity orderEnt2 = new OrderEntity("TestCustomer2", "TestVehicle2", 100, true, true, 50, 3333, null);
-	
-	// Entity List
-	List<OrderEntity> ordersListEnt = List.of(orderEnt1, orderEnt1);
-	
-	// Models
-	Order order1 = new Order("TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333, null);
-	Order orderId1 = new Order(1l, "TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333,
-			Calendar.getInstance().getTime());
-	Order orderId2 = new Order(1l, "TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333, null);
-	Order order2 = new Order("TestCustomer1", "TestVehicle1", 100, true, true, 50, 3333, Calendar.getInstance().getTime());
+	private OrderEntity inputEnt;
+	private OrderEntity returnedEnt;
+	private Order input;
+	private Order returned;
 
-	// Model List
-	List<Order> ordersList = List.of(orderId2, orderId2);
-	
-	
+	@BeforeEach
+	void setup() {
+		inputEnt = new OrderEntity("test", "test", 10, true, true, 10);
+		returnedEnt = new OrderEntity(1l, "test", "test", 10, false, false, 10, 67.0f,
+				Calendar.getInstance().getTime());
+		input = new Order("test", "test", 10, true, true, 10);
+		returned = new Order(1l, "test", "test", 10, false, false, 10, 67.0f, Calendar.getInstance().getTime());
+	}
+
 	@Test
 	public void createOrderTest() throws OrderNotCreatedException {
-		// Act
-		Mockito.when(repo.save(orderEnt1)).thenReturn(orderEnt1);
-		orderEnt1.setCost(3333);
-		orderEnt1.setDate();
-		// Expected
-		boolean result = service.createOrder(order1);
-		// Assertion
-		Assertions.assertTrue(result);
+		// When
+		Mockito.when(this.repo.save(inputEnt)).thenReturn(returnedEnt);
+		// Then
+		assertThat(this.service.createOrder(returned)).usingRecursiveComparison().ignoringFields("date")
+				.isEqualTo(returnedEnt);
+		// Verify
+//		Mockito.verify(this.repo, Mockito.times(1)).save(returnedEnt);
 	}
 
 	@Test
 	public void createOrderCatchTest() throws OrderNotCreatedException {
 		Throwable exception = Assertions.assertThrows(OrderNotCreatedException.class, () -> {
-			Mockito.doThrow(OrderNotCreatedException.class).when(service.createOrder(order1));
+			Mockito.doThrow(OrderNotCreatedException.class).when(service.createOrder(input));
 
 		});
-	
+
 		// Assert
-		Assertions.assertEquals("The order cannot be created, check the request body", exception.getMessage());	
+		Assertions.assertEquals("The order cannot be created, check the request body", exception.getMessage());
 	}
 
-	// The h2 console never has any entries and I have been unable to find a way to resolve this issue
-	// EDIT: I am now suspicious this quirk is due to the @MockBean annotation!
-	
-//	@Test
-//	public void deleteOrderTest() throws IdNotFoundException, OrderNotCreatedException, OrdersNotFoundException {
-//		// Act
-//		repo.save(orderEnt1);
-//		service.createOrder(order1);
-//		System.out.println(service.getAllOrders());
-//		// Arrange
-//		boolean result = service.deleteOrder(1l);
-//		// Assert
-//		Assertions.assertTrue(result);
-//		// Verify
-//	}
-	
+	@Test
+	public void deleteOrderTest() throws IdNotFoundException, OrderNotCreatedException, OrdersNotFoundException {
+		// Given
+		Long id = 1l;
+		Optional<OrderEntity> opt = Optional.of(returnedEnt);
+		// When
+		Mockito.when(this.repo.findById(id)).thenReturn(opt);
+		// Then
+		assertThat(this.service.deleteOrder(id)).isEqualTo(returnedEnt);
+		// Verify
+		Mockito.verify(this.repo, Mockito.times(1)).deleteById(id);
+	}
+
 	@Test
 	public void deleteOrderCatchTest() throws IdNotFoundException {
 		// Act
@@ -102,39 +91,50 @@ public class ServiceTest {
 		// Assert
 		Assertions.assertEquals("Cannot find the specified Id", exception.getMessage());
 	}
-	
+
 	@Test
 	public void updateOrderTest() throws IdNotFoundException {
-		// Act 
-		Mockito.when(repo.findById(1l)).thenReturn(Optional.of(orderEnt1));
-		Order result = service.updateOrder(1l, orderId1);
-		// Assert
-		Assertions.assertEquals(orderId1, result);
-		Mockito.verify(repo, Mockito.times(1)).findById(1l);
+		// Given
+		Long id = 1l;
+		Order toUpdate = new Order("test", "test", 10, false, false, 10);
+		Optional<OrderEntity> opt = Optional.of(returnedEnt);
+		OrderEntity updated = new OrderEntity(id, toUpdate.getCustomer(), toUpdate.getVehicleType(),
+				toUpdate.getDisplacement(), toUpdate.isMilitary(), toUpdate.isWeaponised(),
+				toUpdate.getResourcesRequired(), toUpdate.getCost(), toUpdate.getDate());
+		// When
+		Mockito.when(this.repo.findById(id)).thenReturn(opt);
+		Mockito.when(this.repo.save(updated)).thenReturn(updated);
+		// Then
+		assertThat(this.service.updateOrder(id, toUpdate)).usingRecursiveComparison().ignoringFields("date", "cost")
+				.isEqualTo(updated);
+		// Verify
+		Mockito.verify(this.repo, Mockito.times(2)).findById(id);
+		Mockito.verify(this.repo, Mockito.times(1)).save(returnedEnt);
+
 	}
-	
+
 	@Test
 	public void updateOrderCatchTest() throws IdNotFoundException {
 		Throwable exception = Assertions.assertThrows(IdNotFoundException.class, () -> {
-			Mockito.doThrow(IdNotFoundException.class).when(service.updateOrder(1l, orderId1));
+			Mockito.doThrow(IdNotFoundException.class).when(service.updateOrder(1l, input));
 
 		});
-	
+
 		// Assert
 		Assertions.assertEquals("Cannot find the specified Id", exception.getMessage());
 	}
-	
+
 	@Test
 	public void getAllOrdersTest() throws OrdersNotFoundException {
-		// Act
-		Mockito.when(repo.findAll()).thenReturn(ordersListEnt);
-		// Expected
-		String result = service.getAllOrders().toString();
-		String resultString = "[Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, date=null), Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, date=null)]";
-		// Assert
-		Assertions.assertEquals(resultString, result);
-		// Verification
-		Mockito.verify(repo, Mockito.times(1)).findAll();
+		// Given
+		List<OrderEntity> allOrders = new ArrayList<>();
+		allOrders.add(inputEnt);
+		// When
+		Mockito.when(this.repo.findAll()).thenReturn(allOrders);
+		// Then
+		assertThat(this.service.getAllOrders()).usingRecursiveComparison().ignoringFields("cost").isEqualTo(allOrders);
+		// Verify
+		Mockito.verify(this.repo, Mockito.times(1)).findAll();
 	}
 
 	@Test
@@ -147,18 +147,18 @@ public class ServiceTest {
 		// Assert
 		Assertions.assertEquals("No orders found in database", exception.getMessage());
 	}
-	
+
 	@Test
 	public void getOrderByIdTest() throws IdNotFoundException {
-		// Act
-		Mockito.when(repo.findById(1l)).thenReturn(Optional.of(orderEnt1));
-		// Expected
-		String result = service.getOrderById(1l).toString();
-		String resultString = "Order(id=1, customer=TestCustomer1, vehicleType=TestVehicle1, displacement=100, military=true, weaponised=true, resourcesRequired=50, cost=3333.0, date=null)";
-		// Assert
-		Assertions.assertEquals(resultString, result);
-		// Verification
-		Mockito.verify(repo, Mockito.times(1)).findById(1l);
+		// Given
+		Long id = 1l;
+		Optional<OrderEntity> orderOpt = Optional.of(returnedEnt);
+		// When
+		Mockito.when(this.repo.findById(id)).thenReturn(orderOpt);
+		// Then
+		assertThat(this.service.getOrderById(id)).usingRecursiveComparison().ignoringFields("cost").isEqualTo(returnedEnt);
+		// Verify
+		Mockito.verify(this.repo, Mockito.times(1)).findById(id);
 	}
 
 	@Test

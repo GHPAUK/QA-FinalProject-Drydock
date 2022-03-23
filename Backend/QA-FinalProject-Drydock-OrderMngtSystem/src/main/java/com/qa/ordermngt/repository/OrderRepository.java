@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.qa.ordermngt.entitydto.OrderEntity;
+import com.qa.ordermngt.entity.OrderEntity;
 
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 

@@ -1,4 +1,4 @@
-package com.qa.ordermngt.entitydto;
+package com.qa.ordermngt.entity;
 
 import java.util.Calendar;
 import java.util.Date;
