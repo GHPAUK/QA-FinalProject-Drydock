@@ -1,5 +1,7 @@
 package com.qa.ordermngt.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
 							orderEntity.isWeaponised(), orderEntity.getResourcesRequired(), orderEntity.getCost(),
 							orderEntity.getDate()))
 					.collect(Collectors.toList());
-			
+
 			for (int i = 0; i < orderEntities.size(); i++) {
 				orders.get(i).setDate(orderEntities.get(i).getDate());
 			}
@@ -102,6 +104,59 @@ public class OrderServiceImpl implements OrderService {
 			return order;
 		} catch (Exception e) {
 			throw new IdNotFoundException("Cannot find the specified Id");
+		}
+	}
+
+	@Override
+	public List<Order> getAllOrdersByDate() throws OrdersNotFoundException {
+		try {
+			List<OrderEntity> orderEntities = repo.findAllByOrderByDateAsc();
+
+			List<Order> orders = orderEntities.stream()
+					.map(orderEntity -> new Order(orderEntity.getId(), orderEntity.getCustomer(),
+							orderEntity.getVehicleType(), orderEntity.getDisplacement(), orderEntity.isMilitary(),
+							orderEntity.isWeaponised(), orderEntity.getResourcesRequired(), orderEntity.getCost(),
+							orderEntity.getDate()))
+					.collect(Collectors.toList());
+
+			for (int i = 0; i < orderEntities.size(); i++) {
+				orders.get(i).setDate(orderEntities.get(i).getDate());
+			}
+
+			for (int i = 0; i < orders.size(); i++) {
+				orders.get(i).calcCost();
+			}
+
+			return orders;
+		} catch (Exception e) {
+			throw new OrdersNotFoundException("No orders found in database");
+		}
+	}
+
+	@Override
+	public List<Order> getOrdersByDate(Date orderDate) throws OrdersNotFoundException {
+		try {
+			List<OrderEntity> orderEntities = repo.findOrdersByDate(orderDate);
+			
+			List<Order> orders = orderEntities.stream()
+					.map(orderEntity -> new Order(orderEntity.getId(), orderEntity.getCustomer(),
+							orderEntity.getVehicleType(), orderEntity.getDisplacement(), orderEntity.isMilitary(),
+							orderEntity.isWeaponised(), orderEntity.getResourcesRequired(), orderEntity.getCost(),
+							orderEntity.getDate()))
+					.collect(Collectors.toList());
+
+			for (int i = 0; i < orderEntities.size(); i++) {
+				orders.get(i).setDate(orderEntities.get(i).getDate());
+			}
+
+			for (int i = 0; i < orders.size(); i++) {
+				orders.get(i).calcCost();
+			}
+
+			return orders;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new OrdersNotFoundException("No orders found in database");
 		}
 	}
 

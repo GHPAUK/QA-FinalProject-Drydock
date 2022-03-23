@@ -2,10 +2,6 @@ package com.qa.ordermngt.model;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

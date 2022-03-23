@@ -1,6 +1,9 @@
 
 package com.qa.ordermngt.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,5 +74,18 @@ public class Controller {
 
 		return ResponseEntity.ok(order);
 	}
+	
+	@GetMapping("/getOrdersByDate")
+	public ResponseEntity<List<Order>> getAllOrdersByDate() throws OrdersNotFoundException {
+		List<Order> orders = null;
+		orders = service.getAllOrdersByDate();
+		return ResponseEntity.ok(orders);
+	}
 
+	@GetMapping("/getOrdersByDate/{orderDate}")
+	public ResponseEntity<List<Order>> getOrdersByDate(@PathVariable("orderDate") String orderDate) throws OrdersNotFoundException, ParseException {
+		List<Order> orders = null;
+		orders = service.getOrdersByDate(new SimpleDateFormat("yyyy-MM-dd").parse(orderDate));
+		return ResponseEntity.ok(orders);
+	}
 }

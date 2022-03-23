@@ -1,5 +1,6 @@
 package com.qa.ordermngt.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.qa.ordermngt.model.Order;
@@ -19,5 +20,7 @@ public interface OrderService {
 
 	Order getOrderById(Long id) throws IdNotFoundException;
 
+	List<Order> getAllOrdersByDate() throws OrdersNotFoundException;
 	
+	List<Order> getOrdersByDate(Date date) throws OrdersNotFoundException;
 }
