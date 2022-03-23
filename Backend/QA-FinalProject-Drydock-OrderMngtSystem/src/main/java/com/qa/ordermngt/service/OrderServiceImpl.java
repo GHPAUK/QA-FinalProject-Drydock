@@ -160,4 +160,31 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 
+	@Override
+	public List<Order> getAllOrdersByCost() throws OrdersNotFoundException {
+		try {
+			List<OrderEntity> orderEntities = repo.findAllByOrderByCostDesc();
+			
+			List<Order> orders = orderEntities.stream()
+					.map(orderEntity -> new Order(orderEntity.getId(), orderEntity.getCustomer(),
+							orderEntity.getVehicleType(), orderEntity.getDisplacement(), orderEntity.isMilitary(),
+							orderEntity.isWeaponised(), orderEntity.getResourcesRequired(), orderEntity.getCost(),
+							orderEntity.getDate()))
+					.collect(Collectors.toList());
+
+			for (int i = 0; i < orderEntities.size(); i++) {
+				orders.get(i).setDate(orderEntities.get(i).getDate());
+			}
+
+			for (int i = 0; i < orders.size(); i++) {
+				orders.get(i).calcCost();
+			}
+
+			return orders;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new OrdersNotFoundException("No orders found in database");
+		}
+	}
+
 }

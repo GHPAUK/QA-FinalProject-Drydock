@@ -88,4 +88,11 @@ public class Controller {
 		orders = service.getOrdersByDate(new SimpleDateFormat("yyyy-MM-dd").parse(orderDate));
 		return ResponseEntity.ok(orders);
 	}
+	
+	@GetMapping("/getOrdersByCost")
+	public ResponseEntity<List<Order>> getAllOrdersByCost() throws OrdersNotFoundException {
+		List<Order> orders = null;
+		orders = service.getAllOrdersByCost();
+		return ResponseEntity.ok(orders);
+	}
 }

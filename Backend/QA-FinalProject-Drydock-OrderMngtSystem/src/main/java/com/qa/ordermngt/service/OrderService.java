@@ -23,4 +23,6 @@ public interface OrderService {
 	List<Order> getAllOrdersByDate() throws OrdersNotFoundException;
 	
 	List<Order> getOrdersByDate(Date date) throws OrdersNotFoundException;
+	
+	List<Order> getAllOrdersByCost() throws OrdersNotFoundException;
 }
