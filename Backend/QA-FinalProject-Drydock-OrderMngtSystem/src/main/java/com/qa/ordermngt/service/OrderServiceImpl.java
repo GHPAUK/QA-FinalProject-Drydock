@@ -53,8 +53,12 @@ public class OrderServiceImpl implements OrderService {
 	public Order updateOrder(Long id, Order order) throws IdNotFoundException {
 		try {
 			OrderEntity orderDto = repo.findById(id).get();
-			BeanUtils.copyProperties(order, orderDto, "id");
+			BeanUtils.copyProperties(order, orderDto, "id", "date");
+			orderDto.setDate(repo.findById(id).get().getDate());
 			orderDto.setCost(Math.round((orderDto.getDisplacement() * orderDto.getResourcesRequired()) / 1.5f));
+			order.setDate(orderDto.getDate());
+			order.calcCost();
+			order.setId(id);
 			repo.save(orderDto);
 			return order;
 		} catch (Exception e) {
@@ -74,6 +78,10 @@ public class OrderServiceImpl implements OrderService {
 							orderEntity.isWeaponised(), orderEntity.getResourcesRequired(), orderEntity.getCost(),
 							orderEntity.getDate()))
 					.collect(Collectors.toList());
+			
+			for (int i = 0; i < orderEntities.size(); i++) {
+				orders.get(i).setDate(orderEntities.get(i).getDate());
+			}
 
 			for (int i = 0; i < orders.size(); i++) {
 				orders.get(i).calcCost();
