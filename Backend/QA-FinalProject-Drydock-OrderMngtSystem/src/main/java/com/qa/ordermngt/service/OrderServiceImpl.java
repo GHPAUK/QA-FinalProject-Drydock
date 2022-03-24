@@ -158,7 +158,6 @@ public class OrderServiceImpl implements OrderService {
 
 			return orders;
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new OrdersNotFoundException("No orders found in database");
 		}
 	}
@@ -185,7 +184,6 @@ public class OrderServiceImpl implements OrderService {
 
 			return orders;
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new OrdersNotFoundException("No orders found in database");
 		}
 	}
@@ -202,7 +200,6 @@ public class OrderServiceImpl implements OrderService {
 			}
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new OrderNotCreatedException("The order cannot be created, check the request body");
 		}
 	}

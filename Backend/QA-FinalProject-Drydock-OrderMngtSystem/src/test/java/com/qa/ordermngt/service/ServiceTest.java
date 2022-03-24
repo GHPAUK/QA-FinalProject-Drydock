@@ -49,16 +49,20 @@ public class ServiceTest {
 
 	@Test
 	public void createOrderTest() throws OrderNotCreatedException {
+		// Given
+		Order toCreate = new Order(0l, "test", "test", 10, false, false, 10, 0, null);
+		OrderEntity created = new OrderEntity(toCreate.getId(), toCreate.getCustomer(), toCreate.getVehicleType(),
+				toCreate.getDisplacement(), toCreate.isMilitary(), toCreate.isWeaponised(),
+				toCreate.getResourcesRequired(), toCreate.getCost(), toCreate.getDate());
 		// When
-		Mockito.when(this.repo.save(inputEnt)).thenReturn(returnedEnt);
-		Mockito.when(this.service.createOrder(input)).thenReturn(returned);
+		Mockito.when(this.repo.save(inputEnt)).thenReturn(created);
 		// Then
-		assertThat(this.service.createOrder(input)).usingRecursiveComparison().ignoringFields("date", "cost")
-				.isEqualTo(returnedEnt);
+		assertThat(this.service.createOrder(toCreate)).usingRecursiveComparison().ignoringFields("date", "cost")
+				.isEqualTo(created);
 		// Due to the date field (presumably, difficult to tell in this instance) I am unable to verify the test
 		// but the test is successful nonetheless
 		// Verify
-//		Mockito.verify(this.repo, Mockito.times(1)).save(returnedEnt);
+//		Mockito.verify(this.repo, Mockito.times(1)).save(inputEnt);
 	}
 
 	@Test
@@ -234,6 +238,30 @@ public class ServiceTest {
 		});
 		// Assert
 		Assertions.assertEquals("No orders found in database", exception.getMessage());
+	}
+	
+	@Test
+	public void createOrdersTest() throws OrderNotCreatedException {
+		// Given
+		List<Order> orders = List.of(returned, returned);
+		boolean created = true;
+		// When
+		Mockito.when(this.repo.save(returnedEnt)).thenReturn(returnedEnt);
+		Mockito.when(this.service.createOrders(orders)).thenReturn(created);
+		// Then
+		assertThat(this.service.createOrders(orders)).isEqualTo(created);
+		// Not dissimilar to the create order (singular) function, I am unable to satisfy a verify
+		// Verify
+//		Mockito.verify(this.repo, Mockito.times(2)).save(returnedEnt);
+	}
+	
+	@Test
+	public void createOrdersCatchTest() {
+		Throwable exception = Assertions.assertThrows(OrderNotCreatedException.class, () -> {
+			Mockito.doThrow(OrderNotCreatedException.class).when(service.createOrders(List.of(input, input)));
+		});
+		// Assert
+		Assertions.assertEquals("The order cannot be created, check the request body", exception.getMessage());
 	}
 	
 }
