@@ -37,10 +37,10 @@ public class Controller {
 	}
 
 	@PostMapping("/order")
-	public ResponseEntity<Map<String, OrderEntity>> createOrder(@RequestBody Order order)
+	public ResponseEntity<Map<String, Order>> createOrder(@RequestBody Order order)
 			throws OrderNotCreatedException {
-		OrderEntity created = null;
-		Map<String, OrderEntity> response = new HashMap<>();
+		Order created = null;
+		Map<String, Order> response = new HashMap<>();
 		created = service.createOrder(order);
 		response.put("Created", created);
 

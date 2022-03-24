@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,10 +44,10 @@ public class ControllerTest {
 		OrderEntity create = new OrderEntity("test", "test", 10, false, false, 10, 0, null);
 		String orderJson = this.mapper.writeValueAsString(create);
 		RequestBuilder req = post("/order").contentType(MediaType.APPLICATION_JSON).content(orderJson);
-		OrderEntity saved = new OrderEntity(3l, "test", "test", 10, false, false, 10, 67.0f, Calendar.getInstance().getTime());
+		OrderEntity saved = new OrderEntity(3l, "test", "test", 10, false, false, 10, 67.0f, null);
 		String savedOrder = this.mapper.writeValueAsString(saved);
 		ResultMatcher checkStatus = status().isOk();
-		ResultMatcher checkBody = content().string("{\"Created\":" + savedOrder.toString() + "}");
+		ResultMatcher checkBody = content().string("{\"Created\":" + savedOrder + "}");
 		this.mvc.perform(req).andExpect(checkStatus);
 	}
 

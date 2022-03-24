@@ -12,7 +12,7 @@ import com.qa.ordermngt.utils.OrdersNotFoundException;
 
 public interface OrderService {
 
-	OrderEntity createOrder(Order order) throws OrderNotCreatedException;
+	Order createOrder(Order order) throws OrderNotCreatedException;
 
 	OrderEntity deleteOrder(Long id) throws IdNotFoundException;
 

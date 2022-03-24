@@ -62,9 +62,7 @@ public class ServiceTest {
 	public void createOrderCatchTest() throws OrderNotCreatedException {
 		Throwable exception = Assertions.assertThrows(OrderNotCreatedException.class, () -> {
 			Mockito.doThrow(OrderNotCreatedException.class).when(service.createOrder(input));
-
 		});
-
 		// Assert
 		Assertions.assertEquals("The order cannot be created, check the request body", exception.getMessage());
 	}
@@ -117,9 +115,7 @@ public class ServiceTest {
 	public void updateOrderCatchTest() throws IdNotFoundException {
 		Throwable exception = Assertions.assertThrows(IdNotFoundException.class, () -> {
 			Mockito.doThrow(IdNotFoundException.class).when(service.updateOrder(1l, input));
-
 		});
-
 		// Assert
 		Assertions.assertEquals("Cannot find the specified Id", exception.getMessage());
 	}
@@ -141,9 +137,7 @@ public class ServiceTest {
 	public void getAllOrdersCatchTest() {
 		Throwable exception = Assertions.assertThrows(OrdersNotFoundException.class, () -> {
 			Mockito.doThrow(OrdersNotFoundException.class).when(service.getAllOrders());
-
 		});
-
 		// Assert
 		Assertions.assertEquals("No orders found in database", exception.getMessage());
 	}
@@ -165,12 +159,55 @@ public class ServiceTest {
 	public void getOrderByIdCatchTest() {
 		Throwable exception = Assertions.assertThrows(IdNotFoundException.class, () -> {
 			Mockito.doThrow(IdNotFoundException.class).when(service.getOrderById(1l));
-
 		});
-
 		// Assert
 		Assertions.assertEquals("Cannot find the specified Id", exception.getMessage());
 	}
 	
+	@Test
+	public void getAllOrdersByDateTest() throws OrdersNotFoundException {
+		// Given
+		List<OrderEntity> allOrders = new ArrayList<>();
+		allOrders.add(inputEnt);
+		allOrders.add(returnedEnt);
+		// When
+		Mockito.when(this.repo.findAllByOrderByDateAsc()).thenReturn(allOrders);
+		// Then
+		assertThat(this.service.getAllOrdersByDate()).usingRecursiveComparison().ignoringFields().isEqualTo(allOrders);
+		// Verify
+		Mockito.verify(this.repo, Mockito.times(1)).findAllByOrderByDateAsc();
+	}
+	
+	@Test
+	public void getAllOrdersByDateCatchTest() {
+		Throwable exception = Assertions.assertThrows(OrdersNotFoundException.class, () -> {
+			Mockito.doThrow(OrdersNotFoundException.class).when(service.getAllOrdersByDate());
+		});
+		// Assert
+		Assertions.assertEquals("No orders found in database", exception.getMessage());
+	}
+	
+	@Test
+	public void getOrdersByDateSpecifiedTest() throws OrdersNotFoundException {
+		// Given
+		List<OrderEntity> allOrders = new ArrayList<>();
+		allOrders.add(inputEnt);
+		allOrders.add(inputEnt);
+		// When
+		Mockito.when(this.repo.findOrdersByDate(null)).thenReturn(allOrders);
+		// Then
+		assertThat(this.service.getOrdersByDate(null)).usingRecursiveComparison().ignoringFields().isEqualTo(allOrders);
+		// Verify
+		Mockito.verify(this.repo, Mockito.times(1)).findOrdersByDate(null);
+	}
 
+	@Test
+	public void getOrdersByDateSpecifiedCatchTest() {
+		Throwable exception = Assertions.assertThrows(OrdersNotFoundException.class, () -> {
+			Mockito.doThrow(OrdersNotFoundException.class).when(service.getOrdersByDate(null));
+		});
+		// Assert
+		Assertions.assertEquals("No orders found in database", exception.getMessage());
+	}
+	
 }

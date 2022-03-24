@@ -30,30 +30,6 @@ public class Order {
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
 	}
-	
-//	public Order(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
-//			int resourcesRequired, float cost, Date date) {
-//		super();
-//		this.customer = customer;
-//		this.vehicleType = vehicleType;
-//		this.displacement = displacement;
-//		this.military = military;
-//		this.weaponised = weaponised;
-//		this.resourcesRequired = resourcesRequired;
-//		this.date = date;
-//	}
-	
-//	public Order(long id, String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
-//			int resourcesRequired) {
-//		super();
-//		this.id = id;
-//		this.customer = customer;
-//		this.vehicleType = vehicleType;
-//		this.displacement = displacement;
-//		this.military = military;
-//		this.weaponised = weaponised;
-//		this.resourcesRequired = resourcesRequired;
-//	}
 
 	public Order(long id, String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
 			int resourcesRequired, float cost, Date date) {

@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
 @Getter
 public class OrderEntity {
 
@@ -44,6 +43,12 @@ public class OrderEntity {
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	
+	public OrderEntity() {
+		super();
+		setDate();
+		setCost();
+	}
+	
 	public OrderEntity(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
 			int resourcesRequired) {
 		super();
@@ -53,6 +58,8 @@ public class OrderEntity {
 		this.military = military;
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
+		setDate();
+		setCost();
 	}
 	
 	public OrderEntity(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
@@ -65,6 +72,7 @@ public class OrderEntity {
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
 		this.date = date;
+		setCost();
 	}
 	
 	public OrderEntity(long id, String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
@@ -78,6 +86,7 @@ public class OrderEntity {
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
 		this.date = date;
+		setCost();
 	}
 
 	public void setDate() {

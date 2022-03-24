@@ -27,15 +27,15 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public OrderEntity createOrder(Order order) throws OrderNotCreatedException {
+	public Order createOrder(Order order) throws OrderNotCreatedException {
 		try {
+			order.calcCost();
+			order.setDate();
 			OrderEntity toSave = new OrderEntity();
 			BeanUtils.copyProperties(order, toSave);
-			toSave.setCost();
-			toSave.setDate();
-			order.setDate();
 			repo.save(toSave);
-			return toSave;
+			BeanUtils.copyProperties(toSave, order);
+			return order;
 		} catch (Exception e) {
 			throw new OrderNotCreatedException("The order cannot be created, check the request body");
 		}
