@@ -171,4 +171,19 @@ public class ControllerTest {
 		ResultMatcher checkBody = content().string("{\"deleted all records\":true}");
 		this.mvc.perform(req).andExpect(checkStatus).andExpectAll(checkBody);
 	}
+	
+	@Test
+	public void testGetOrderByCustomer() throws Exception {
+		String customer = "TEST_CUSTOMER2";
+		OrderEntity find = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		String foundJson = this.mapper.writeValueAsString(find);
+		
+		RequestBuilder req = get("/get/" + customer);
+		
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().string("[" + foundJson + "]");
+		
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
 }
