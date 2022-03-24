@@ -221,7 +221,7 @@ public class OrderServiceImpl implements OrderService {
 			orders = repo.findAllByCustomer(customer);
 			return orders;
 		} catch (Exception e) {
-			throw new CustomerNotFoundException("No field found in database");
+			throw new CustomerNotFoundException("No customer found in database");
 		}
 	}
 

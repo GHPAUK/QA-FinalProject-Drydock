@@ -19,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import com.qa.ordermngt.entity.OrderEntity;
 import com.qa.ordermngt.model.Order;
 import com.qa.ordermngt.repository.OrderRepository;
+import com.qa.ordermngt.utils.CustomerNotFoundException;
 import com.qa.ordermngt.utils.IdNotFoundException;
 import com.qa.ordermngt.utils.OrderNotCreatedException;
 import com.qa.ordermngt.utils.OrdersNotFoundException;
@@ -282,6 +283,29 @@ public class ServiceTest {
 		});
 		// Assert
 		Assertions.assertEquals("No orders found in database", exception.getMessage());
+	}
+	
+	@Test
+	public void getAllByCustomerTest() throws CustomerNotFoundException {
+		// Given
+		List<OrderEntity> allOrders = new ArrayList<>();
+		allOrders.add(inputEnt);
+		allOrders.add(inputEnt);
+		// When
+		Mockito.when(this.repo.findAllByCustomer("test")).thenReturn(allOrders);
+		// Then
+		assertThat(this.service.getAllByCustomer("test")).usingRecursiveComparison().ignoringFields().isEqualTo(allOrders);
+		// Verify
+		Mockito.verify(this.repo, Mockito.times(1)).findAllByCustomer("test");
+	}
+	
+	@Test
+	public void getAllByCustomerCatchTest() {
+		Throwable exception = Assertions.assertThrows(CustomerNotFoundException.class, () -> {
+			Mockito.doThrow(CustomerNotFoundException.class).when(service.getAllByCustomer("test"));
+		});
+		// Assert
+		Assertions.assertEquals("No customer found in database", exception.getMessage());
 	}
 	
 }
