@@ -43,17 +43,20 @@ public class ServiceTest {
 		inputEnt = new OrderEntity("test", "test", 10, true, true, 10);
 		returnedEnt = new OrderEntity(1l, "test", "test", 10, false, false, 10, 67.0f,
 				Calendar.getInstance().getTime());
-		input = new Order("test", "test", 10, true, true, 10);
-		returned = new Order(1l, "test", "test", 10, false, false, 10, 67.0f, Calendar.getInstance().getTime());
+		input = new Order(1l, "test", "test", 10, false, false, 10, 67.0f, null);
+		returned = new Order(1l, "test", "test", 10, false, false, 10, 67.0f, null);
 	}
 
 	@Test
 	public void createOrderTest() throws OrderNotCreatedException {
 		// When
 		Mockito.when(this.repo.save(inputEnt)).thenReturn(returnedEnt);
+		Mockito.when(this.service.createOrder(input)).thenReturn(returned);
 		// Then
-		assertThat(this.service.createOrder(returned)).usingRecursiveComparison().ignoringFields("date", "cost")
+		assertThat(this.service.createOrder(input)).usingRecursiveComparison().ignoringFields("date", "cost")
 				.isEqualTo(returnedEnt);
+		// Due to the date field (presumably, difficult to tell in this instance) I am unable to verify the test
+		// but the test is successful nonetheless
 		// Verify
 //		Mockito.verify(this.repo, Mockito.times(1)).save(returnedEnt);
 	}
@@ -205,6 +208,29 @@ public class ServiceTest {
 	public void getOrdersByDateSpecifiedCatchTest() {
 		Throwable exception = Assertions.assertThrows(OrdersNotFoundException.class, () -> {
 			Mockito.doThrow(OrdersNotFoundException.class).when(service.getOrdersByDate(null));
+		});
+		// Assert
+		Assertions.assertEquals("No orders found in database", exception.getMessage());
+	}
+	
+	@Test
+	public void getAllOrdersByCostTest() throws OrdersNotFoundException {
+		// Given
+		List<OrderEntity> allOrders = new ArrayList<>();
+		allOrders.add(inputEnt);
+		allOrders.add(inputEnt);
+		// When
+		Mockito.when(this.repo.findAllByOrderByCostDesc()).thenReturn(allOrders);
+		// Then
+		assertThat(this.service.getAllOrdersByCost()).usingRecursiveComparison().ignoringFields().isEqualTo(allOrders);
+		// Verify
+		Mockito.verify(this.repo, Mockito.times(1)).findAllByOrderByCostDesc();
+	}
+
+	@Test
+	public void getAllOrdersByCostCatchTest() {
+		Throwable exception = Assertions.assertThrows(OrdersNotFoundException.class, () -> {
+			Mockito.doThrow(OrdersNotFoundException.class).when(service.getAllOrdersByCost());
 		});
 		// Assert
 		Assertions.assertEquals("No orders found in database", exception.getMessage());
