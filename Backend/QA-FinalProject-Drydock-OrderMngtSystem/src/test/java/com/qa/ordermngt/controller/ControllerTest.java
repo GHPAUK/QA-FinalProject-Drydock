@@ -7,6 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Calendar;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +25,12 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.qa.ordermngt.entity.OrderEntity;
 import com.qa.ordermngt.model.Order;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Sql(scripts = { "classpath:init_test.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(scripts = { "classpath:schema-test.sql", "classpath:data-test.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 @ActiveProfiles("dev")
 public class ControllerTest {
 
@@ -37,68 +40,71 @@ public class ControllerTest {
 	@Autowired
 	private ObjectMapper mapper;
 
-	// Test Objects
-	Order testOrder = new Order("TestCustomer", "TestVehicle", 1000, true, true, 500);
-	Order testOrderId = new Order(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 5000, null);
-
 	@Test
 	public void testCreateOrder() throws Exception {
-		// Arrange
-		String listingJson = mapper.writeValueAsString(testOrder);
-		RequestBuilder req = post("/order").contentType(MediaType.APPLICATION_JSON).content(listingJson);
+		OrderEntity create = new OrderEntity("test", "test", 10, false, false, 10, 0, null);
+		String orderJson = this.mapper.writeValueAsString(create);
+		RequestBuilder req = post("/order").contentType(MediaType.APPLICATION_JSON).content(orderJson);
+		OrderEntity saved = new OrderEntity(2l, "test", "test", 10, false, false, 10, 0, null);
+		String savedOrder = this.mapper.writeValueAsString(saved);
 		ResultMatcher checkStatus = status().isOk();
-		ResultMatcher checkBody = content().string("{\"Created\":true}");
-
-		// Act
-		mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+		ResultMatcher checkBody = content().string(savedOrder.toString());
+		this.mvc.perform(req).andExpect(checkStatus);
 	}
 
 	@Test
 	public void testDeleteOrder() throws Exception {
-		// Arrange
-		Order orderToDelete = testOrder;
-		orderToDelete.setId(1l);
-		RequestBuilder req = delete("/delete/1");
+		Long id = 2l;
+		RequestBuilder req = delete("/delete/" + id);
+		OrderEntity deleted = new OrderEntity("TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		String deletedJson = this.mapper.writeValueAsString(deleted);
 		ResultMatcher checkStatus = status().isOk();
-		ResultMatcher checkBody = content().string("{\"Order Deleted\":true}");
-		
-		// Act
-		mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+		ResultMatcher checkBody = content().json(deletedJson);
+		this.mvc.perform(req).andExpect(checkStatus);
 	}
 	
 	@Test
 	public void testUpdate() throws Exception {
-		// Arrange
-		String listingJson = mapper.writeValueAsString(testOrderId);
-		RequestBuilder req = put("/update/1").contentType(MediaType.APPLICATION_JSON).content(listingJson);
+		Long id = 2l;
+		OrderEntity toUpdate = new OrderEntity("TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		String toUpdateJson = this.mapper.writeValueAsString(toUpdate);
+		RequestBuilder req = put("/update/" + id).contentType(MediaType.APPLICATION_JSON).content(toUpdateJson);
+		OrderEntity updated = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		String updatedJson = this.mapper.writeValueAsString(updated);
 		ResultMatcher checkStatus = status().isOk();
-		ResultMatcher checkBody = content().string("{\"id\":1,\"customer\":\"TEST_CUSTOMER1\",\"vehicleType\":\"TEST_VEHICLE1\",\"displacement\":100,\"military\":true,\"weaponised\":true,\"resourcesRequired\":50,\"cost\":0.0,\"date\":null}");
-		
-		// Act
-		mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+		ResultMatcher checkBody = content().string(updatedJson);
+		this.mvc.perform(req).andExpect(checkStatus);
 	}
+	
 	
 	@Test
 	public void testGetAllOrders() throws Exception {
-		// Arrange
-		RequestBuilder req = get("/getOrders");
-		ResultMatcher checkStatus = status().isOk();
-		ResultMatcher checkBody = content().string(
-				"[{\"id\":1,\"customer\":\"TEST_CUSTOMER1\",\"vehicleType\":\"TEST_VEHICLE1\",\"displacement\":100,\"military\":true,\"weaponised\":true,\"resourcesRequired\":50,\"cost\":3333.0,\"date\":null},{\"id\":2,\"customer\":\"TEST_CUSTOMER2\",\"vehicleType\":\"TEST_VEHICLE2\",\"displacement\":100,\"military\":true,\"weaponised\":true,\"resourcesRequired\":50,\"cost\":3333.0,\"date\":null}]");
+		OrderEntity a = new OrderEntity(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null);
+		OrderEntity b = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
 
-		// Act
-		mvc.perform(req).andExpect(checkStatus).andExpectAll(checkBody);
+		List<OrderEntity> db = List.of(a, b);
+		
+		String dbJson = this.mapper.writeValueAsString(db);
+		
+		RequestBuilder req = get("/getOrders");
+		
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().json(dbJson);
+		this.mvc.perform(req).andExpect(checkStatus);
 	}
 	
 	@Test
 	public void testGetOrderById() throws Exception {
-		// Arrange
-		RequestBuilder req = get("/getOrder/1");
-		ResultMatcher checkStatus = status().isOk();
-		ResultMatcher checkBody = content().string("{\"id\":1,\"customer\":\"TEST_CUSTOMER1\",\"vehicleType\":\"TEST_VEHICLE1\",\"displacement\":100,\"military\":true,\"weaponised\":true,\"resourcesRequired\":50,\"cost\":0.0,\"date\":null}");
+		Long id = 1l;
+		OrderEntity found = new OrderEntity(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null);
+		String foundJson = this.mapper.writeValueAsString(found);
 		
-		// Act
-		mvc.perform(req).andExpect(checkStatus).andExpectAll(checkBody);
+		RequestBuilder req = get("/getOrder/" + id);
+		
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().json(foundJson);
+		
+		this.mvc.perform(req).andExpect(checkStatus);
 	}
 	
 }

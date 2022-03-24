@@ -2,10 +2,6 @@ package com.qa.ordermngt.model;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
-
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,29 +31,29 @@ public class Order {
 		this.resourcesRequired = resourcesRequired;
 	}
 	
-	public Order(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
-			int resourcesRequired, float cost, Date date) {
-		super();
-		this.customer = customer;
-		this.vehicleType = vehicleType;
-		this.displacement = displacement;
-		this.military = military;
-		this.weaponised = weaponised;
-		this.resourcesRequired = resourcesRequired;
-		this.date = date;
-	}
+//	public Order(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
+//			int resourcesRequired, float cost, Date date) {
+//		super();
+//		this.customer = customer;
+//		this.vehicleType = vehicleType;
+//		this.displacement = displacement;
+//		this.military = military;
+//		this.weaponised = weaponised;
+//		this.resourcesRequired = resourcesRequired;
+//		this.date = date;
+//	}
 	
-	public Order(long id, String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
-			int resourcesRequired) {
-		super();
-		this.id = id;
-		this.customer = customer;
-		this.vehicleType = vehicleType;
-		this.displacement = displacement;
-		this.military = military;
-		this.weaponised = weaponised;
-		this.resourcesRequired = resourcesRequired;
-	}
+//	public Order(long id, String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
+//			int resourcesRequired) {
+//		super();
+//		this.id = id;
+//		this.customer = customer;
+//		this.vehicleType = vehicleType;
+//		this.displacement = displacement;
+//		this.military = military;
+//		this.weaponised = weaponised;
+//		this.resourcesRequired = resourcesRequired;
+//	}
 
 	public Order(long id, String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
 			int resourcesRequired, float cost, Date date) {
