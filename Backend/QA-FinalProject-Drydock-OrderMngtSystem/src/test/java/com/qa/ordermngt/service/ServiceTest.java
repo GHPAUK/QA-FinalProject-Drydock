@@ -263,6 +263,25 @@ public class ServiceTest {
 		Assertions.assertEquals("The order cannot be created, check the request body", exception.getMessage());
 	}
 	
-	
+	@Test
+	public void deleteAllOrderTest() throws OrdersNotFoundException {
+		// Given
+		boolean deleted = true;
+		// When
+		// Then
+		assertThat(this.service.deleteAllOrders()).isEqualTo(deleted);
+		// Verify
+		Mockito.verify(this.repo, Mockito.times(1)).deleteAll();
+	}
+
+	@Test
+	public void deleteAllOrderCatchTest() throws OrdersNotFoundException {
+		// Act
+		Throwable exception = Assertions.assertThrows(OrdersNotFoundException.class, () -> {
+			Mockito.doThrow(OrdersNotFoundException.class).when(service.deleteAllOrders());
+		});
+		// Assert
+		Assertions.assertEquals("No orders found in database", exception.getMessage());
+	}
 	
 }
