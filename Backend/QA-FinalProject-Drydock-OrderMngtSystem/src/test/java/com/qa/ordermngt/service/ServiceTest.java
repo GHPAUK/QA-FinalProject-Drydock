@@ -52,7 +52,7 @@ public class ServiceTest {
 		// When
 		Mockito.when(this.repo.save(inputEnt)).thenReturn(returnedEnt);
 		// Then
-		assertThat(this.service.createOrder(returned)).usingRecursiveComparison().ignoringFields("date")
+		assertThat(this.service.createOrder(returned)).usingRecursiveComparison().ignoringFields("date", "cost")
 				.isEqualTo(returnedEnt);
 		// Verify
 //		Mockito.verify(this.repo, Mockito.times(1)).save(returnedEnt);

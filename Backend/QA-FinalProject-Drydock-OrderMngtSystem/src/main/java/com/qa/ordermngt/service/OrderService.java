@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.qa.ordermngt.entity.OrderEntity;
 import com.qa.ordermngt.model.Order;
+import com.qa.ordermngt.utils.CustomerNotFoundException;
 import com.qa.ordermngt.utils.IdNotFoundException;
 import com.qa.ordermngt.utils.OrderNotCreatedException;
 import com.qa.ordermngt.utils.OrdersNotFoundException;
@@ -30,4 +31,6 @@ public interface OrderService {
 	boolean createOrders(List<Order> order) throws OrderNotCreatedException;
 
 	boolean deleteAllOrders() throws OrdersNotFoundException;
+
+	List<OrderEntity> getAllByCustomer(String customer) throws CustomerNotFoundException;
 }

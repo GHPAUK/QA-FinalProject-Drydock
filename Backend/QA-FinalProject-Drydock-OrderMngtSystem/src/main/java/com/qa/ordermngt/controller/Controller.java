@@ -3,7 +3,6 @@ package com.qa.ordermngt.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.qa.ordermngt.entity.OrderEntity;
 import com.qa.ordermngt.model.Order;
 import com.qa.ordermngt.service.OrderService;
+import com.qa.ordermngt.utils.CustomerNotFoundException;
 import com.qa.ordermngt.utils.IdNotFoundException;
 import com.qa.ordermngt.utils.OrderNotCreatedException;
 import com.qa.ordermngt.utils.OrdersNotFoundException;
@@ -101,7 +101,8 @@ public class Controller {
 	}
 
 	@PostMapping("/orders")
-	public ResponseEntity<Map<String, Boolean>> createOrders(@RequestBody List<Order> order) throws OrderNotCreatedException {
+	public ResponseEntity<Map<String, Boolean>> createOrders(@RequestBody List<Order> order)
+			throws OrderNotCreatedException {
 		boolean created = false;
 		Map<String, Boolean> response = new HashMap<>();
 		created = service.createOrders(order);
@@ -111,11 +112,19 @@ public class Controller {
 	}
 
 	@DeleteMapping("/deleteAll")
-	public ResponseEntity<Map<String, Boolean>> deleteAllOrders() throws OrdersNotFoundException{
+	public ResponseEntity<Map<String, Boolean>> deleteAllOrders() throws OrdersNotFoundException {
 		boolean deleted = false;
 		deleted = service.deleteAllOrders();
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted all records", deleted);
 		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/get/{customer}")
+	public ResponseEntity<List<OrderEntity>> getOrderByQuery(@PathVariable("customer") String customer)
+			throws CustomerNotFoundException {
+		List<OrderEntity> orders = null;
+		orders = service.getAllByCustomer(customer);
+		return ResponseEntity.ok(orders);
 	}
 }

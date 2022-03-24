@@ -1,5 +1,6 @@
 package com.qa.ordermngt.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.qa.ordermngt.entity.OrderEntity;
 import com.qa.ordermngt.model.Order;
 import com.qa.ordermngt.repository.OrderRepository;
+import com.qa.ordermngt.utils.CustomerNotFoundException;
 import com.qa.ordermngt.utils.IdNotFoundException;
 import com.qa.ordermngt.utils.OrderNotCreatedException;
 import com.qa.ordermngt.utils.OrdersNotFoundException;
@@ -30,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
 		try {
 			OrderEntity toSave = new OrderEntity();
 			BeanUtils.copyProperties(order, toSave);
-//			toSave.setCost();
+			toSave.setCost();
 			toSave.setDate();
 			order.setDate();
 			repo.save(toSave);
@@ -51,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
 //			throw new IdNotFoundException("Cannot find the specified Id");
 //		}
 //	}
-	
+
 	@Override
 	public OrderEntity deleteOrder(Long id) throws IdNotFoundException {
 		try {
@@ -151,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> getOrdersByDate(Date orderDate) throws OrdersNotFoundException {
 		try {
 			List<OrderEntity> orderEntities = repo.findOrdersByDate(orderDate);
-			
+
 			List<Order> orders = orderEntities.stream()
 					.map(orderEntity -> new Order(orderEntity.getId(), orderEntity.getCustomer(),
 							orderEntity.getVehicleType(), orderEntity.getDisplacement(), orderEntity.isMilitary(),
@@ -178,7 +180,7 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> getAllOrdersByCost() throws OrdersNotFoundException {
 		try {
 			List<OrderEntity> orderEntities = repo.findAllByOrderByCostDesc();
-			
+
 			List<Order> orders = orderEntities.stream()
 					.map(orderEntity -> new Order(orderEntity.getId(), orderEntity.getCustomer(),
 							orderEntity.getVehicleType(), orderEntity.getDisplacement(), orderEntity.isMilitary(),
@@ -225,6 +227,17 @@ public class OrderServiceImpl implements OrderService {
 			return true;
 		} catch (Exception e) {
 			throw new OrdersNotFoundException("No orders found in database");
+		}
+	}
+
+	@Override
+	public List<OrderEntity> getAllByCustomer(String customer) throws CustomerNotFoundException {
+		try {
+			List<OrderEntity> orders = null;
+			orders = repo.findAllByCustomer(customer);
+			return orders;
+		} catch (Exception e) {
+			throw new CustomerNotFoundException("No field found in database");
 		}
 	}
 
