@@ -36,15 +36,15 @@ public class ServiceTest {
 	private OrderEntity inputEnt;
 	private OrderEntity returnedEnt;
 	private Order input;
-	private Order returned;
+	private Order input2;
 
 	@BeforeEach
 	void setup() {
 		inputEnt = new OrderEntity("test", "test", 10, true, true, 10);
 		returnedEnt = new OrderEntity(1l, "test", "test", 10, false, false, 10, 67.0f,
 				Calendar.getInstance().getTime());
-		input = new Order(1l, "test", "test", 10, false, false, 10, 67.0f, null);
-		returned = new Order(1l, "test", "test", 10, false, false, 10, 67.0f, null);
+		input = new Order("test", "test", 10, false, false, 10);
+		input2 = new Order("test", "test", 10, false, false, 10);
 	}
 
 	@Test
@@ -243,10 +243,9 @@ public class ServiceTest {
 	@Test
 	public void createOrdersTest() throws OrderNotCreatedException {
 		// Given
-		List<Order> orders = List.of(returned, returned);
+		List<Order> orders = List.of(input, input2);
 		boolean created = true;
 		// When
-		Mockito.when(this.repo.save(returnedEnt)).thenReturn(returnedEnt);
 		Mockito.when(this.service.createOrders(orders)).thenReturn(created);
 		// Then
 		assertThat(this.service.createOrders(orders)).isEqualTo(created);
@@ -263,5 +262,7 @@ public class ServiceTest {
 		// Assert
 		Assertions.assertEquals("The order cannot be created, check the request body", exception.getMessage());
 	}
+	
+	
 	
 }
