@@ -7,11 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -72,7 +70,7 @@ public class ControllerTest {
 		String updatedJson = this.mapper.writeValueAsString(updated);
 		ResultMatcher checkStatus = status().isOk();
 		ResultMatcher checkBody = content().string(updatedJson);
-		this.mvc.perform(req).andExpect(checkStatus);
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
 	}
 	
 	
@@ -89,7 +87,7 @@ public class ControllerTest {
 		
 		ResultMatcher checkStatus = status().isOk();
 		ResultMatcher checkBody = content().json(dbJson);
-		this.mvc.perform(req).andExpect(checkStatus);
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
 	}
 	
 	@Test
@@ -103,7 +101,74 @@ public class ControllerTest {
 		ResultMatcher checkStatus = status().isOk();
 		ResultMatcher checkBody = content().json(foundJson);
 		
-		this.mvc.perform(req).andExpect(checkStatus);
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
 	}
 	
+	@Test
+	public void testGetOrdersArrangeByDate() throws Exception {
+		OrderEntity a = new OrderEntity(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null);
+		OrderEntity b = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		List<OrderEntity> db = List.of(a, b);
+		
+		String foundJson = this.mapper.writeValueAsString(db);
+		
+		RequestBuilder req = get("/getOrdersByDate");
+		
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().json(foundJson);
+		
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
+	@Test
+	public void testGetOrderByDatePassedIn() throws Exception {
+		String date = "2022-03-24";
+		List<OrderEntity> db = List.of();
+		
+		String foundJson = this.mapper.writeValueAsString(db);
+		RequestBuilder req = get("/getOrdersByDate/" + date);
+		
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().json(foundJson);
+		
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
+	@Test
+	public void testGetOrderByCost() throws Exception {
+		OrderEntity a = new OrderEntity(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null);
+		OrderEntity b = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		List<OrderEntity> db = List.of(a, b);
+		
+		String foundJson = this.mapper.writeValueAsString(db);
+		RequestBuilder req = get("/getOrdersByCost");
+		
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().json(foundJson);
+		
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
+	@Test
+	public void testCreateOrders() throws Exception {
+		OrderEntity a = new OrderEntity(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null);
+		OrderEntity b = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		List<OrderEntity> orderList = List.of(a, b);
+		
+		String toWrite = this.mapper.writeValueAsString(orderList);
+		
+		RequestBuilder req = post("/orders").contentType(MediaType.APPLICATION_JSON).content(toWrite);
+		
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().string("{\"Created\":true}");
+		this.mvc.perform(req).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
+	@Test
+	public void testDeleteAllOrders() throws Exception {
+		RequestBuilder req = delete("/deleteAll");
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().string("{\"deleted all records\":true}");
+		this.mvc.perform(req).andExpect(checkStatus).andExpectAll(checkBody);
+	}
 }
