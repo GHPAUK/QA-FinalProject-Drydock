@@ -1,6 +1,5 @@
 package com.qa.ordermngt.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -41,18 +40,6 @@ public class OrderServiceImpl implements OrderService {
 			throw new OrderNotCreatedException("The order cannot be created, check the request body");
 		}
 	}
-
-//	@Override
-//	public boolean deleteOrder(Long id) throws IdNotFoundException {
-//		try {
-//			OrderEntity entityDto = repo.findById(id).get();
-//			repo.delete(entityDto);
-//			return true;
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			throw new IdNotFoundException("Cannot find the specified Id");
-//		}
-//	}
 
 	@Override
 	public OrderEntity deleteOrder(Long id) throws IdNotFoundException {

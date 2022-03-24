@@ -11,7 +11,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +25,6 @@ import org.springframework.test.web.servlet.ResultMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qa.ordermngt.entity.OrderEntity;
-import com.qa.ordermngt.model.Order;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -45,10 +43,10 @@ public class ControllerTest {
 		OrderEntity create = new OrderEntity("test", "test", 10, false, false, 10, 0, null);
 		String orderJson = this.mapper.writeValueAsString(create);
 		RequestBuilder req = post("/order").contentType(MediaType.APPLICATION_JSON).content(orderJson);
-		OrderEntity saved = new OrderEntity(2l, "test", "test", 10, false, false, 10, 0, null);
+		OrderEntity saved = new OrderEntity(3l, "test", "test", 10, false, false, 10, 67.0f, Calendar.getInstance().getTime());
 		String savedOrder = this.mapper.writeValueAsString(saved);
 		ResultMatcher checkStatus = status().isOk();
-		ResultMatcher checkBody = content().string(savedOrder.toString());
+		ResultMatcher checkBody = content().string("{\"Created\":" + savedOrder.toString() + "}");
 		this.mvc.perform(req).andExpect(checkStatus);
 	}
 
@@ -56,11 +54,11 @@ public class ControllerTest {
 	public void testDeleteOrder() throws Exception {
 		Long id = 2l;
 		RequestBuilder req = delete("/delete/" + id);
-		OrderEntity deleted = new OrderEntity("TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		OrderEntity deleted = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
 		String deletedJson = this.mapper.writeValueAsString(deleted);
 		ResultMatcher checkStatus = status().isOk();
-		ResultMatcher checkBody = content().json(deletedJson);
-		this.mvc.perform(req).andExpect(checkStatus);
+		ResultMatcher checkBody = content().string("{\"Order Deleted\":" + deletedJson + "}");
+		this.mvc.perform(req).andExpect(checkStatus).andExpectAll(checkBody);
 	}
 	
 	@Test
