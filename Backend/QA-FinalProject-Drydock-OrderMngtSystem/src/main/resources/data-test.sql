@@ -1,0 +1,2 @@
+INSERT INTO `ORDER_ENTITY` (`customer`, `vehicle_type`, `displacement`, `military`, `weaponised`, `resources_required`, `cost`, `date`) VALUES ('TEST_CUSTOMER1', 'TEST_VEHICLE1', 100, true, true, 50, 3333, null);
+INSERT INTO `ORDER_ENTITY` (`customer`, `vehicle_type`, `displacement`, `military`, `weaponised`, `resources_required`, `cost`, `date`) VALUES ('TEST_CUSTOMER2', 'TEST_VEHICLE2', 100, true, true, 50, 3333, null);
