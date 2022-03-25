@@ -2,7 +2,6 @@ package com.qa.ordermngt.entity;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +13,6 @@ import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
