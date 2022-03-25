@@ -53,7 +53,8 @@ public class ControllerTest {
 	public void testDeleteOrder() throws Exception {
 		Long id = 2l;
 		RequestBuilder req = delete("/delete/" + id);
-		OrderEntity deleted = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		OrderEntity deleted = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 3333, null);
+		deleted.setCost();
 		String deletedJson = this.mapper.writeValueAsString(deleted);
 		ResultMatcher checkStatus = status().isOk();
 		ResultMatcher checkBody = content().string("{\"Order Deleted\":" + deletedJson + "}");
@@ -64,9 +65,11 @@ public class ControllerTest {
 	public void testUpdate() throws Exception {
 		Long id = 2l;
 		OrderEntity toUpdate = new OrderEntity("TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		toUpdate.setCost();
 		String toUpdateJson = this.mapper.writeValueAsString(toUpdate);
 		RequestBuilder req = put("/update/" + id).contentType(MediaType.APPLICATION_JSON).content(toUpdateJson);
 		OrderEntity updated = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		updated.setCost();
 		String updatedJson = this.mapper.writeValueAsString(updated);
 		ResultMatcher checkStatus = status().isOk();
 		ResultMatcher checkBody = content().string(updatedJson);
@@ -76,9 +79,10 @@ public class ControllerTest {
 	
 	@Test
 	public void testGetAllOrders() throws Exception {
-		OrderEntity a = new OrderEntity(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null);
-		OrderEntity b = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
-
+		OrderEntity a = new OrderEntity(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 3333, null);
+		OrderEntity b = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 3333, null);
+		a.setCost();
+		b.setCost();
 		List<OrderEntity> db = List.of(a, b);
 		
 		String dbJson = this.mapper.writeValueAsString(db);
@@ -94,6 +98,7 @@ public class ControllerTest {
 	public void testGetOrderById() throws Exception {
 		Long id = 1l;
 		OrderEntity found = new OrderEntity(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null);
+		found.setCost();
 		String foundJson = this.mapper.writeValueAsString(found);
 		
 		RequestBuilder req = get("/getOrder/" + id);
@@ -108,6 +113,8 @@ public class ControllerTest {
 	public void testGetOrdersArrangeByDate() throws Exception {
 		OrderEntity a = new OrderEntity(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null);
 		OrderEntity b = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		a.setCost();
+		b.setCost();
 		List<OrderEntity> db = List.of(a, b);
 		
 		String foundJson = this.mapper.writeValueAsString(db);
@@ -138,6 +145,8 @@ public class ControllerTest {
 	public void testGetOrderByCost() throws Exception {
 		OrderEntity a = new OrderEntity(1l, "TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null);
 		OrderEntity b = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		a.setCost();
+		b.setCost();
 		List<OrderEntity> db = List.of(a, b);
 		
 		String foundJson = this.mapper.writeValueAsString(db);
@@ -176,6 +185,7 @@ public class ControllerTest {
 	public void testGetOrderByCustomer() throws Exception {
 		String customer = "TEST_CUSTOMER2";
 		OrderEntity find = new OrderEntity(2l, "TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null);
+		find.setCost();
 		String foundJson = this.mapper.writeValueAsString(find);
 		
 		RequestBuilder req = get("/get/" + customer);

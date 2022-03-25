@@ -41,7 +41,7 @@ public class ServiceTest {
 
 	@BeforeEach
 	void setup() {
-		inputEnt = new OrderEntity("test", "test", 10, true, true, 10);
+		inputEnt = new OrderEntity("test", "test", 10, true, true, 10, 67.0f, null);
 		returnedEnt = new OrderEntity(1l, "test", "test", 10, false, false, 10, 67.0f,
 				Calendar.getInstance().getTime());
 		input = new Order("test", "test", 10, false, false, 10);
@@ -60,10 +60,6 @@ public class ServiceTest {
 		// Then
 		assertThat(this.service.createOrder(toCreate)).usingRecursiveComparison().ignoringFields("date", "cost")
 				.isEqualTo(created);
-		// Due to the date field (presumably, difficult to tell in this instance) I am unable to verify the test
-		// but the test is successful nonetheless
-		// Verify
-//		Mockito.verify(this.repo, Mockito.times(1)).save(inputEnt);
 	}
 
 	@Test
@@ -140,7 +136,7 @@ public class ServiceTest {
 		// Verify
 		Mockito.verify(this.repo, Mockito.times(1)).findAll();
 	}
-
+	
 	@Test
 	public void getAllOrdersCatchTest() {
 		Throwable exception = Assertions.assertThrows(OrdersNotFoundException.class, () -> {
@@ -176,12 +172,12 @@ public class ServiceTest {
 	public void getAllOrdersByDateTest() throws OrdersNotFoundException {
 		// Given
 		List<OrderEntity> allOrders = new ArrayList<>();
-		allOrders.add(inputEnt);
-		allOrders.add(returnedEnt);
+		allOrders.add(new OrderEntity("TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null));
+		allOrders.add(new OrderEntity("TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null));
 		// When
 		Mockito.when(this.repo.findAllByOrderByDateAsc()).thenReturn(allOrders);
 		// Then
-		assertThat(this.service.getAllOrdersByDate()).usingRecursiveComparison().ignoringFields().isEqualTo(allOrders);
+		assertThat(this.service.getAllOrdersByDate()).usingRecursiveComparison().ignoringFields("cost").isEqualTo(allOrders);
 		// Verify
 		Mockito.verify(this.repo, Mockito.times(1)).findAllByOrderByDateAsc();
 	}
@@ -199,12 +195,12 @@ public class ServiceTest {
 	public void getOrdersByDateSpecifiedTest() throws OrdersNotFoundException {
 		// Given
 		List<OrderEntity> allOrders = new ArrayList<>();
-		allOrders.add(inputEnt);
-		allOrders.add(inputEnt);
+		allOrders.add(new OrderEntity("TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null));
+		allOrders.add(new OrderEntity("TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null));
 		// When
 		Mockito.when(this.repo.findOrdersByDate(null)).thenReturn(allOrders);
 		// Then
-		assertThat(this.service.getOrdersByDate(null)).usingRecursiveComparison().ignoringFields().isEqualTo(allOrders);
+		assertThat(this.service.getOrdersByDate(null)).usingRecursiveComparison().ignoringFields("cost").isEqualTo(allOrders);
 		// Verify
 		Mockito.verify(this.repo, Mockito.times(1)).findOrdersByDate(null);
 	}
@@ -222,8 +218,11 @@ public class ServiceTest {
 	public void getAllOrdersByCostTest() throws OrdersNotFoundException {
 		// Given
 		List<OrderEntity> allOrders = new ArrayList<>();
-		allOrders.add(inputEnt);
-		allOrders.add(inputEnt);
+		allOrders.add(new OrderEntity("TEST_CUSTOMER1", "TEST_VEHICLE1", 100, true, true, 50, 0, null));
+		allOrders.add(new OrderEntity("TEST_CUSTOMER2", "TEST_VEHICLE2", 100, true, true, 50, 0, null));
+		allOrders.get(0).setCost();
+		allOrders.get(1).setCost();
+
 		// When
 		Mockito.when(this.repo.findAllByOrderByCostDesc()).thenReturn(allOrders);
 		// Then
@@ -250,10 +249,6 @@ public class ServiceTest {
 		Mockito.when(this.service.createOrders(orders)).thenReturn(created);
 		// Then
 		Assertions.assertTrue(created);
-//		assertThat(this.service.createOrders(orders)).isEqualTo(created);
-		// Not dissimilar to the create order (singular) function, I am unable to satisfy a verify
-		// Verify
-//		Mockito.verify(this.repo, Mockito.times(2)).save(returnedEnt);
 	}
 	
 	@Test

@@ -54,6 +54,7 @@ public class Controller {
 		deleted = service.deleteOrder(id);
 		Map<String, OrderEntity> response = new HashMap<>();
 		response.put("Order Deleted", deleted);
+		
 		return ResponseEntity.ok(response);
 	}
 
@@ -61,6 +62,7 @@ public class Controller {
 	public ResponseEntity<Order> updateOrder(@PathVariable("id") Long id, @RequestBody Order order)
 			throws IdNotFoundException {
 		order = service.updateOrder(id, order);
+		
 		return ResponseEntity.ok(order);
 	}
 
@@ -68,6 +70,7 @@ public class Controller {
 	public ResponseEntity<List<Order>> getAllOrders() throws OrdersNotFoundException {
 		List<Order> orders = null;
 		orders = service.getAllOrders();
+		
 		return ResponseEntity.ok(orders);
 	}
 
@@ -75,6 +78,7 @@ public class Controller {
 	public ResponseEntity<Order> getOrder(@PathVariable("id") Long id) throws IdNotFoundException {
 		Order order = null;
 		order = service.getOrderById(id);
+		
 		return ResponseEntity.ok(order);
 	}
 
@@ -82,6 +86,7 @@ public class Controller {
 	public ResponseEntity<List<Order>> getAllOrdersByDate() throws OrdersNotFoundException {
 		List<Order> orders = null;
 		orders = service.getAllOrdersByDate();
+		
 		return ResponseEntity.ok(orders);
 	}
 
@@ -90,6 +95,7 @@ public class Controller {
 			throws OrdersNotFoundException, ParseException {
 		List<Order> orders = null;
 		orders = service.getOrdersByDate(new SimpleDateFormat("yyyy-MM-dd").parse(orderDate));
+		
 		return ResponseEntity.ok(orders);
 	}
 
@@ -97,6 +103,7 @@ public class Controller {
 	public ResponseEntity<List<Order>> getAllOrdersByCost() throws OrdersNotFoundException {
 		List<Order> orders = null;
 		orders = service.getAllOrdersByCost();
+		
 		return ResponseEntity.ok(orders);
 	}
 
@@ -117,6 +124,7 @@ public class Controller {
 		deleted = service.deleteAllOrders();
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted all records", deleted);
+		
 		return ResponseEntity.ok(response);
 	}
 
@@ -125,6 +133,7 @@ public class Controller {
 			throws CustomerNotFoundException {
 		List<OrderEntity> orders = null;
 		orders = service.getAllByCustomer(customer);
+		
 		return ResponseEntity.ok(orders);
 	}
 }

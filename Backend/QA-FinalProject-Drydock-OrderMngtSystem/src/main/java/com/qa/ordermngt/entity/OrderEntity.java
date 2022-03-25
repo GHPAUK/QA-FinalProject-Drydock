@@ -45,8 +45,6 @@ public class OrderEntity {
 	
 	public OrderEntity() {
 		super();
-		setDate();
-		setCost();
 	}
 	
 	public OrderEntity(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
@@ -58,8 +56,6 @@ public class OrderEntity {
 		this.military = military;
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
-		setDate();
-		setCost();
 	}
 	
 	public OrderEntity(String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
@@ -71,8 +67,6 @@ public class OrderEntity {
 		this.military = military;
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
-		this.date = date;
-		setCost();
 	}
 	
 	public OrderEntity(long id, String customer, String vehicleType, int displacement, boolean military, boolean weaponised,
@@ -85,8 +79,6 @@ public class OrderEntity {
 		this.military = military;
 		this.weaponised = weaponised;
 		this.resourcesRequired = resourcesRequired;
-		this.date = date;
-		setCost();
 	}
 
 	public void setDate() {
